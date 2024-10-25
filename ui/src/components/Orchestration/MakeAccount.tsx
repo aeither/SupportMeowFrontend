@@ -1,11 +1,11 @@
-import { AgoricWalletConnection, useAgoric } from '@agoric/react-components';
+import { type AgoricWalletConnection, useAgoric } from '@agoric/react-components';
 import { StargateClient } from '@cosmjs/stargate';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Button } from 'react-daisyui';
 import { NotificationContext } from '../../context/NotificationContext';
 import { useContractStore } from '../../store/contract';
-import { DynamicToastChild } from '../Tabs';
-import { rpcEndpoints, getIbcChannel } from '../../util';
+import { getIbcChannel, rpcEndpoints } from '../../util';
+import type { DynamicToastChild } from '../Tabs';
 
 const fetchBalances = async (addresses, agoricChainName) => {
   return Promise.all(
@@ -57,7 +57,7 @@ const makeAccountOffer = async (
 ) => {
   if (!selectedChain) {
     addNotification({
-      text: `Please Select Chain`,
+      text: "Please Select Chain",
       status: 'error',
     });
     return;

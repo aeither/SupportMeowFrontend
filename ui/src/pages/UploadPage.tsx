@@ -1,3 +1,4 @@
+import { useAgoric } from "@agoric/react-components";
 import { Upload, XCircle } from "lucide-react";
 import { type ChangeEvent, type FormEvent, useState } from "react";
 
@@ -15,7 +16,32 @@ interface FormErrors {
 	image?: string;
 }
 
+type InscriptionResponse = {
+	transactionHash: string;
+	inscriptionData: {
+		data: {
+			inscription: Array<{
+				metadata: {
+					parent: {
+						type: string;
+						identifier: string;
+					};
+					metadata: {
+						mime: string;
+						name: string;
+						price: string;
+						description: string;
+					};
+				};
+				content_path: string;
+				content_hash: string;
+			}>;
+		};
+	};
+};
+
 export default function UploadPage() {
+	const { walletConnection, chainName: agoricChainName } = useAgoric();
 	const [formData, setFormData] = useState<FormData>({
 		name: "",
 		description: "",
@@ -75,6 +101,7 @@ export default function UploadPage() {
 					description: formData.description,
 					price: formData.price,
 					image: imageBase64,
+					creator: walletConnection.address,
 				};
 
 				console.log("requestBody", requestBody);
@@ -95,7 +122,7 @@ export default function UploadPage() {
 					throw new Error("Upload failed");
 				}
 
-				const data = await response.json();
+				const data: InscriptionResponse = await response.json();
 				console.log("Upload successful:", data);
 
 				// Reset form after successful submission
