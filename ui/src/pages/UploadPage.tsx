@@ -41,7 +41,7 @@ type InscriptionResponse = {
 };
 
 export default function UploadPage() {
-	const { walletConnection, chainName: agoricChainName } = useAgoric();
+	const { address } = useAgoric();
 	const [formData, setFormData] = useState<FormData>({
 		name: "",
 		description: "",
@@ -85,6 +85,13 @@ export default function UploadPage() {
 		e.preventDefault();
 		if (validateForm()) {
 			try {
+				// Check if walletConnection.address is defined
+				if (!address) {
+					alert("Wallet connection is not defined");
+					return;
+				}
+				console.log("walletConnection.address: ", address);
+
 				// Convert image to base64 if exists
 				let imageBase64 = "";
 				if (formData.image) {
@@ -101,7 +108,8 @@ export default function UploadPage() {
 					description: formData.description,
 					price: formData.price,
 					image: imageBase64,
-					creator: walletConnection.address,
+					// creator: walletConnection.address,
+					creator: address,
 				};
 
 				console.log("requestBody", requestBody);
