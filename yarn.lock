@@ -9748,7 +9748,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:^10.4.17":
+"autoprefixer@npm:^10.4.20":
   version: 10.4.20
   resolution: "autoprefixer@npm:10.4.20"
   dependencies:
@@ -11111,7 +11111,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^7.0.2"
     "@typescript-eslint/parser": "npm:^7.15.0"
     "@vitejs/plugin-react": "npm:^4.2.1"
-    autoprefixer: "npm:^10.4.17"
+    autoprefixer: "npm:^10.4.20"
     buffer: "npm:^6.0.3"
     chain-registry: "npm:1.28.0"
     cosmos-kit: "npm:^2.19.0"
@@ -11120,13 +11120,13 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^4.6.0"
     eslint-plugin-react-refresh: "npm:^0.4.5"
     lucide-react: "npm:^0.453.0"
-    postcss: "npm:^8.4.35"
+    postcss: "npm:^8.4.47"
     react: "npm:^18.3.1"
     react-daisyui: "npm:^5.0.0"
     react-dom: "npm:^18.2.0"
     react-router-dom: "npm:^6.27.0"
     ses: "npm:^1.8.0"
-    tailwindcss: "npm:^3.4.1"
+    tailwindcss: "npm:^3.4.14"
     typescript: "npm:^5.2.2"
     vite: "npm:^5.1.4"
   languageName: unknown
@@ -16620,7 +16620,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.23, postcss@npm:^8.4.27, postcss@npm:^8.4.35, postcss@npm:^8.4.43":
+"postcss@npm:^8.4.23, postcss@npm:^8.4.27, postcss@npm:^8.4.43, postcss@npm:^8.4.47":
   version: 8.4.47
   resolution: "postcss@npm:8.4.47"
   dependencies:
@@ -18418,7 +18418,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^3.4.1":
+"tailwindcss@npm:^3.4.14":
   version: 3.4.14
   resolution: "tailwindcss@npm:3.4.14"
   dependencies:

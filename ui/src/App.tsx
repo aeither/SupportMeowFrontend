@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Tabs } from "./components/Tabs";
+import { ListPage } from "./pages/ListPage";
+import UploadPage from "./pages/UploadPage";
 import { ContractProvider } from "./providers/Contract";
 
 // Root layout component
@@ -13,8 +15,8 @@ function RootLayout() {
 	const { themeClass, setTheme, setColorMode } = useTheme();
 
 	useEffect(() => {
-		setColorMode("dark");
-		setTheme("dark");
+		setColorMode("light");
+		setTheme("light");
 	}, [setTheme, setColorMode]);
 
 	return (
@@ -37,8 +39,12 @@ const router = createBrowserRouter([
 			},
 			// Add more routes as needed
 			{
-				path: "/some-path",
-				element: <div>Some Component</div>,
+				path: "/upload",
+				element: <UploadPage />,
+			},
+			{
+				path: "/list",
+				element: <ListPage />,
 			},
 		],
 	},
