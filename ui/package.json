@@ -19,9 +19,11 @@
     "chain-registry": "1.28.0",
     "cosmos-kit": "^2.19.0",
     "daisyui": "^4.12.10",
+    "lucide-react": "^0.453.0",
     "react": "^18.3.1",
     "react-daisyui": "^5.0.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.27.0",
     "ses": "^1.8.0"
   },
   "devDependencies": {
