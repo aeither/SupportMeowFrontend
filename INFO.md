@@ -1,6 +1,12 @@
+## TroubleShooting
+
+```bash
+yarn add prettier in agoric-sdk folder
+```
+
 ## Running Local Nodes
 
-run it `cd multichain-testing` and
+Run it `cd multichain-testing` and
 
 ```bash
 make clean setup && make start
@@ -32,6 +38,12 @@ make start
 
 ## Getting Started
 
+Stop Docker
+
+```bash
+yarn stop:docker
+```
+
 Start Docker
 
 ```bash
@@ -50,17 +62,15 @@ Enter CLI
 yarn docker:bash
 ```
 
-## Winding Down
-
-Stop Docker
-
-```bash
-yarn stop:docker
-```
-
 ## Add Key
 
-create new wallet "alice" and import 24 words to Browser Keplr
+in root folder
+
+```bash
+make hermes-update
+```
+
+in contract folder create new wallet "alice" and import 24 words to Browser Keplr
 
 ```bash
 make add-address

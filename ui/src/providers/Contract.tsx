@@ -1,9 +1,9 @@
-import { PropsWithChildren, useEffect } from 'react';
+import { useAgoric } from '@agoric/react-components';
 import {
   type ChainStorageWatcher,
   AgoricChainStoragePathKind as Kind,
 } from '@agoric/rpc';
-import { useAgoric } from '@agoric/react-components';
+import { type PropsWithChildren, useEffect } from 'react';
 import { useContractStore } from '../store/contract';
 
 const { fromEntries } = Object;

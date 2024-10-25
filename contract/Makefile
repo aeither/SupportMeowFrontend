@@ -10,7 +10,7 @@ ATOM=000000$(ATOM_DENOM)
 
 # your deployer address made from make add-address
 # ADDR=agoric1k78s7qz7rxy8afyjrqk3dntg8m83zaw3upe60p
-ADDR=agoric1rqra0s42hwjljvd007v7let8rqfgtrsm94r0r3
+ADDR=agoric1dk0cph8dgts6rzk247xt9j27hk6pt4nqhafkcp
 
 PROVISION_POOL_ADDR=agoric1megzytg65cyrgzs6fvzxgrcqvwwl7ugpt62346
 
