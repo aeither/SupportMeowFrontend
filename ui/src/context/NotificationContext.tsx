@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { DynamicToastChild } from '../components/Tabs';
+import type { DynamicToastChild } from '../components/Tabs';
 
 export type NotificationState = {
   addNotification?: (arg0: DynamicToastChild) => void;

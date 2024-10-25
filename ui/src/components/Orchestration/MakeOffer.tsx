@@ -14,7 +14,7 @@ export const makeOffer = async (
 ) => {
 	if (!selectedChain) {
 		addNotification({
-			text: `Please Select Chain`,
+			text: "Please Select Chain",
 			status: "error",
 		});
 		setLoading(false);
@@ -23,7 +23,7 @@ export const makeOffer = async (
 	}
 
 	const { instances, brands } = useContractStore.getState();
-	const instance = instances?.["orca"];
+	const instance = instances?.orca;
 	console.log("🚀 ~ instance:", instance);
 	console.log("🚀 ~ brands:", brands);
 

@@ -8,6 +8,13 @@ interface FormData {
 	image: File | null;
 }
 
+interface FormErrors {
+	name?: string;
+	description?: string;
+	price?: string;
+	image?: string;
+}
+
 export default function UploadPage() {
 	const [formData, setFormData] = useState<FormData>({
 		name: "",
@@ -16,7 +23,7 @@ export default function UploadPage() {
 		image: null,
 	});
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
-	const [errors, setErrors] = useState<Partial<FormData>>({});
+	const [errors, setErrors] = useState<FormErrors>({});
 
 	const handleInputChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -26,26 +33,26 @@ export default function UploadPage() {
 		setErrors((prev) => ({ ...prev, [name]: "" }));
 	};
 
+	// In validateForm function
+	const validateForm = (): boolean => {
+		const newErrors: FormErrors = {};
+		if (!formData.name.trim()) newErrors.name = "Name is required";
+		if (!formData.description.trim())
+			newErrors.description = "Description is required";
+		if (!formData.price.trim()) newErrors.price = "Price is required";
+		if (!formData.image) newErrors.image = "Image is required";
+		setErrors(newErrors);
+		return Object.keys(newErrors).length === 0;
+	};
+
+	// In handleImageChange function
 	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (file) {
 			setFormData((prev) => ({ ...prev, image: file }));
 			setImagePreview(URL.createObjectURL(file));
-			setErrors((prev) => ({ ...prev, image: "" }));
+			setErrors((prev) => ({ ...prev, image: undefined }));
 		}
-	};
-
-	const validateForm = (): boolean => {
-		const newErrors: Partial<FormData> = {};
-		if (!formData.name.trim()) newErrors.name = "Name is required";
-		if (!formData.description.trim())
-			newErrors.description = "Description is required";
-		if (!formData.price.trim()) newErrors.price = "Price is required";
-		else if (isNaN(Number.parseFloat(formData.price)))
-			newErrors.price = "Price must be a number";
-		if (!formData.image) newErrors.image = "Image is required";
-		setErrors(newErrors);
-		return Object.keys(newErrors).length === 0;
 	};
 
 	const handleSubmit = async (e: FormEvent) => {
@@ -70,14 +77,19 @@ export default function UploadPage() {
 					image: imageBase64,
 				};
 
+				console.log("requestBody", requestBody);
+
 				// Make API call
-				const response = await fetch("https://example.com/api/upload", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
+				const response = await fetch(
+					"https://1115-5-195-99-219.ngrok-free.app/execute",
+					{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(requestBody),
 					},
-					body: JSON.stringify(requestBody),
-				});
+				);
 
 				if (!response.ok) {
 					throw new Error("Upload failed");
@@ -185,6 +197,7 @@ export default function UploadPage() {
 
 						{/* Image Upload */}
 						<div>
+							{/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
 							<label className="block text-sm font-medium text-gray-700">
 								Cat's Photo
 							</label>
@@ -223,7 +236,7 @@ export default function UploadPage() {
 														type="file"
 														className="sr-only"
 														onChange={handleImageChange}
-														accept="image/*"
+														accept="image/png" // Changed from image/* to image/png
 													/>
 												</label>
 												<p className="pl-1">or drag and drop</p>
@@ -235,9 +248,9 @@ export default function UploadPage() {
 									)}
 								</div>
 							</div>
-							{errors.image && (
+							{/* {errors.image && (
 								<p className="mt-1 text-sm text-red-600">{errors.image}</p>
-							)}
+							)} */}
 						</div>
 
 						{/* Submit Button */}

@@ -21,7 +21,7 @@ const Navbar = () => {
 									loading="eager"
 								/>
 							</div> */}
-							<ThumbsUpIcon  className="text-white"/>
+							<ThumbsUpIcon className="text-white" />
 							<span className="hidden sm:block text-xl font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
 								Cat Shelter
 							</span>
@@ -35,7 +35,7 @@ const Navbar = () => {
 
 					<div className="flex items-center space-x-4">
 						<div className="relative">
-							<NetworkDropdown className="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" />
+							<NetworkDropdown />
 						</div>
 
 						<ConnectWalletButton className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors" />

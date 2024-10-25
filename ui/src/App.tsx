@@ -1,6 +1,7 @@
 import { AgoricProvider } from "@agoric/react-components";
 import "@agoric/react-components/dist/style.css";
 import { ThemeProvider, useTheme } from "@interchain-ui/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { wallets } from "cosmos-kit";
 import { useEffect } from "react";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
@@ -9,6 +10,8 @@ import { Tabs } from "./components/Tabs";
 import { ListPage } from "./pages/ListPage";
 import UploadPage from "./pages/UploadPage";
 import { ContractProvider } from "./providers/Contract";
+
+const queryClient = new QueryClient();
 
 // Root layout component
 function RootLayout() {
@@ -52,40 +55,43 @@ const router = createBrowserRouter([
 
 function App() {
 	return (
-		<ThemeProvider>
-			<AgoricProvider
-				wallets={wallets.extension}
-				agoricNetworkConfigs={[
-					{
-						testChain: {
-							chainId: "agoriclocal",
-							chainName: "agoric-local",
-							iconUrl: "agoric.svg",
+		<QueryClientProvider client={queryClient}>
+			<ThemeProvider>
+				<AgoricProvider
+					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+					wallets={wallets.extension as unknown as any}
+					agoricNetworkConfigs={[
+						{
+							testChain: {
+								chainId: "agoriclocal",
+								chainName: "agoric-local",
+								iconUrl: "agoric.svg",
+							},
+							apis: {
+								rest: ["http://localhost:1317"],
+								rpc: ["http://localhost:26657"],
+							},
 						},
-						apis: {
-							rest: ["http://localhost:1317"],
-							rpc: ["http://localhost:26657"],
+						{
+							testChain: {
+								chainId: "agoric-emerynet-8",
+								chainName: "emerynet",
+								iconUrl: "agoric.svg",
+							},
+							apis: {
+								rest: ["https://emerynet.api.agoric.net"],
+								rpc: ["https://emerynet.rpc.agoric.net"],
+							},
 						},
-					},
-					{
-						testChain: {
-							chainId: "agoric-emerynet-8",
-							chainName: "emerynet",
-							iconUrl: "agoric.svg",
-						},
-						apis: {
-							rest: ["https://emerynet.api.agoric.net"],
-							rpc: ["https://emerynet.rpc.agoric.net"],
-						},
-					},
-				]}
-				defaultChainName="agoric-local"
-			>
-				<ContractProvider>
-					<RouterProvider router={router} />
-				</ContractProvider>
-			</AgoricProvider>
-		</ThemeProvider>
+					]}
+					defaultChainName="agoric-local"
+				>
+					<ContractProvider>
+						<RouterProvider router={router} />
+					</ContractProvider>
+				</AgoricProvider>
+			</ThemeProvider>
+		</QueryClientProvider>
 	);
 }
 
