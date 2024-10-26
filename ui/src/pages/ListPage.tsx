@@ -15,6 +15,7 @@ interface InscriptionMetadata {
 			name: string;
 			description: string;
 			price: string;
+			creator: string;
 		};
 	};
 	content_path: string;
@@ -158,7 +159,8 @@ export function ListPage() {
 
 			const result = await client.sendTokens(
 				accounts[0].address,
-				"cosmos1m9l358xunhhwds0568za49mzhvuxx9uxre5tud",
+				selectedInscription.metadata.metadata.creator ||
+					"cosmos1m9l358xunhhwds0568za49mzhvuxx9uxre5tud",
 				[{ denom: "uatom", amount: uatomAmount }],
 				{
 					amount: [{ denom: "uatom", amount: "5000" }],
@@ -194,6 +196,8 @@ export function ListPage() {
 		);
 	}
 
+	console.log("data", data);
+
 	return (
 		<>
 			<div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -221,6 +225,13 @@ export function ListPage() {
 										<h2 className="text-xl font-semibold text-gray-900 mb-2">
 											{inscription.metadata.metadata.name}
 										</h2>
+										{inscription.metadata.metadata.creator && (
+											<p className="text-sm text-gray-500 mb-2">
+												Creator:{" "}
+												{inscription.metadata.metadata.creator.slice(0, 6)}...
+												{inscription.metadata.metadata.creator.slice(-4)}
+											</p>
+										)}
 										<p className="text-gray-600 mb-4 line-clamp-3">
 											{inscription.metadata.metadata.description}
 										</p>
@@ -289,12 +300,13 @@ export function ListPage() {
 											<input
 												type="number"
 												id="amount"
-												className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+												className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 												value={donationAmount}
 												onChange={(e) => setDonationAmount(e.target.value)}
 												placeholder="Enter amount"
 												min="0"
 												step="0.000001"
+												required
 											/>
 										</div>
 

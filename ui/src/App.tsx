@@ -9,6 +9,7 @@ import { Navbar } from "./components/Navbar";
 import { Tabs } from "./components/Tabs";
 import { ListPage } from "./pages/ListPage";
 import UploadPage from "./pages/UploadPage";
+import { VerifyPage } from "./pages/VerifyPage";
 import { ContractProvider } from "./providers/Contract";
 
 const queryClient = new QueryClient();
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
 			{
 				path: "/list",
 				element: <ListPage />,
+			},
+			{
+				path: "/verify",
+				element: <VerifyPage />,
 			},
 		],
 	},
