@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { wallets } from "cosmos-kit";
 import { useEffect } from "react";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import Footer from "./components/Footer";
 import { Navbar } from "./components/Navbar";
 import { Tabs } from "./components/Tabs";
 import { Hello } from "./pages/HelloWorldPage";
@@ -29,6 +30,7 @@ function RootLayout() {
 		<div className={themeClass}>
 			<Navbar />
 			<Outlet />
+			<Footer />
 		</div>
 	);
 }

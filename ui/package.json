@@ -16,6 +16,8 @@
   "dependencies": {
     "@agoric/react-components": "0.2.1-dev-e6f79e0.0",
     "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/react-separator": "^1.1.0",
+    "@radix-ui/react-slot": "^1.1.0",
     "@wardenprotocol/wardenjs": "^0.0.12-hackmos",
     "buffer": "^6.0.3",
     "chain-registry": "1.28.0",
