@@ -23,32 +23,67 @@ const CHAIN_ID = "warden_1337-1";
 export function InteractPage() {
 	const queryFutureResult = async (id: number) => {
 		try {
-			const client = await warden.ClientFactory.createRPCQueryClient({
-				rpcEndpoint: "http://localhost:26657",
-			});
-
-			const query = {
+			const queryMsg = {
 				get_future_result: {
 					id,
 				},
 			};
 
-			const queryMsg = new TextEncoder().encode(JSON.stringify(query));
-			const result = await client.cosmwasm.wasm.v1.queryContract({
-				address: CONTRACT_ADDRESS,
-				queryData: queryMsg,
-			});
-			console.log("🚀 ~ queryFutureResult ~ result:", result)
+			const encodedQuery = Buffer.from(JSON.stringify(queryMsg)).toString(
+				"base64",
+			);
+			const endpoint = `http://localhost:1317/cosmwasm/wasm/v1/contract/${CONTRACT_ADDRESS}/smart/${encodedQuery}`;
 
-			return JSON.parse(new TextDecoder().decode(result.data));
+			const response = await fetch(endpoint, {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+				},
+			});
+
+			if (!response.ok) {
+				const errorText = await response.text();
+				console.error("Query Error Response:", errorText);
+				throw new Error(
+					`Query failed with status: ${response.status}. ${errorText}`,
+				);
+			}
+
+			const data = await response.json();
+			console.log("Query Result:", data);
+			return data;
 		} catch (err) {
 			console.error("Query failed:", err);
+			throw err;
+		}
+	};
+
+	const queryFutureResultRPC = async (id: number) => {
+		try {
+			const client = await warden.ClientFactory.createRPCQueryClient({
+				rpcEndpoint: "http://localhost:26657",
+			});
+
+			const queryMsg = {
+				get_future_result: {
+					id,
+				},
+			};
+
+			const response = await client.cosmwasm.wasm.v1.smartContractState({
+				address: CONTRACT_ADDRESS,
+				queryData: Buffer.from(JSON.stringify(queryMsg)),
+			});
+
+			return response;
+		} catch (error) {
+			console.error("RPC query failed:", error);
+			throw error;
 		}
 	};
 
 	const handleExecute = async () => {
 		try {
-			// You should replace this with your actual mnemonic handling
 			const mnemonic =
 				"exclude try nephew main caught favorite tone degree lottery device tissue tent ugly mouse pelican gasp lava flush pen river noise remind balcony emerge";
 			const ethWallet = ethers.Wallet.fromPhrase(mnemonic);
@@ -103,7 +138,20 @@ export function InteractPage() {
 			<button
 				type="button"
 				className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-				onClick={() => queryFutureResult(0)}
+				onClick={async () => {
+					try {
+						const result = await queryFutureResult(0);
+						console.log("REST Query Result:", result);
+					} catch (error) {
+						console.error("REST query failed, trying RPC...");
+						try {
+							const rpcResult = await queryFutureResultRPC(0);
+							console.log("RPC Query Result:", rpcResult);
+						} catch (rpcError) {
+							console.error("Both queries failed");
+						}
+					}
+				}}
 			>
 				Query Contract
 			</button>
