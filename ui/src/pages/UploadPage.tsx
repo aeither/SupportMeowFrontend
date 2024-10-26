@@ -1,7 +1,14 @@
 import { useAgoric } from "@agoric/react-components";
 import { Loader2, Upload, XCircle } from "lucide-react"; // Added Loader2
 import { type ChangeEvent, type FormEvent, useState } from "react";
+import { useWardenContract } from "../hooks/useWardenContract";
 import type { FormErrors, InscriptionResponse, UploadFormData } from "../types";
+
+const CONTRACT_ADDRESS =
+	"warden14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9srt30us";
+const CHAIN_ID = "warden_1337-1";
+const MNEMONIC =
+	"exclude try nephew main caught favorite tone degree lottery device tissue tent ugly mouse pelican gasp lava flush pen river noise remind balcony emerge";
 
 export default function UploadPage() {
 	const { address } = useAgoric();
@@ -14,6 +21,12 @@ export default function UploadPage() {
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [errors, setErrors] = useState<FormErrors>({});
 	const [isSubmitting, setIsSubmitting] = useState(false); // Added loading state
+	const { queryContract, executeContract, isLoading, error } =
+		useWardenContract({
+			contractAddress: CONTRACT_ADDRESS,
+			chainId: CHAIN_ID,
+			mnemonic: MNEMONIC,
+		});
 
 	const handleInputChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -97,7 +110,25 @@ export default function UploadPage() {
 				const data: InscriptionResponse = await response.json();
 				console.log("Upload successful:", data);
 
-				// Reset form after successful submission
+				/**
+				 * Warden contract execute and query
+				 */
+				await executeContract({
+					do_stuff: {
+						input: data.transactionHash,
+					},
+				});
+
+				const result = await queryContract({
+					get_future_result: {
+						id: 0,
+					},
+				});
+				console.log("🚀 ~ warden ~ get_future_result:", result);
+
+				/**
+				 * Reset form after successful submission
+				 */
 				setFormData({ name: "", description: "", price: "", image: null });
 				setImagePreview(null);
 				alert("Cat added successfully!");
@@ -113,6 +144,7 @@ export default function UploadPage() {
 			}
 		}
 	};
+
 	return (
 		<div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
 			<div className="max-w-xl mx-auto">
