@@ -15,10 +15,12 @@
   },
   "dependencies": {
     "@agoric/react-components": "0.2.1-dev-e6f79e0.0",
+    "@wardenprotocol/wardenjs": "^0.0.12-hackmos",
     "buffer": "^6.0.3",
     "chain-registry": "1.28.0",
     "cosmos-kit": "^2.19.0",
     "daisyui": "^4.12.10",
+    "ethers": "^6.13.4",
     "graphql": "^16.9.0",
     "graphql-request": "^7.1.0",
     "lucide-react": "^0.453.0",

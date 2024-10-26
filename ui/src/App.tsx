@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Tabs } from "./components/Tabs";
+import { InteractPage } from "./pages/InteractPage";
 import { ListPage } from "./pages/ListPage";
 import UploadPage from "./pages/UploadPage";
 import { VerifyPage } from "./pages/VerifyPage";
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
 			{
 				path: "/verify",
 				element: <VerifyPage />,
+			},
+			{
+				path: "/interact",
+				element: <InteractPage />,
 			},
 		],
 	},

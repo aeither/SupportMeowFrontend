@@ -97,3 +97,19 @@ check balance
 ```bash
 kubectl exec -i agoriclocal-genesis-0 -c validator -- agd query bank balances agoric1rqra0s42hwjljvd007v7let8rqfgtrsm94r0r3
 ```
+
+## Theory for Contract Interaction
+
+for querying, signing and broadcasting txs
+@cosmjs/stargate
+- IBC relayer
+- token transfer
+- keygen
+- ibc relayer
+
+for additional functionalities for smart contract
+@cosmjs/cosmwasm-stargate
+- smart contract query and interaction
+
+@cosmjs/proto-signing
+- for using mnemonic wallet. good for scripting
