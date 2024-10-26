@@ -1,6 +1,6 @@
 import { useAgoric } from "@agoric/react-components";
-import { Loader2, Upload, XCircle } from "lucide-react"; // Added Loader2
-import { type ChangeEvent, type FormEvent, useState } from "react";
+import { Loader2, Upload, XCircle } from "lucide-react";
+import { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
 import { useWardenContract } from "../hooks/useWardenContract";
 import type { FormErrors, InscriptionResponse, UploadFormData } from "../types";
 
@@ -9,6 +9,59 @@ const CONTRACT_ADDRESS =
 const CHAIN_ID = "warden_1337-1";
 const MNEMONIC =
 	"exclude try nephew main caught favorite tone degree lottery device tissue tent ugly mouse pelican gasp lava flush pen river noise remind balcony emerge";
+
+const loadingPhrases = [
+	"Running AI on Image",
+	"Uploading Image to Asteroid",
+	"Executing on Warden",
+];
+
+function LoadingOverlay() {
+	const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			setCurrentPhraseIndex(
+				(prevIndex) => (prevIndex + 1) % loadingPhrases.length,
+			);
+		}, 2000);
+
+		return () => clearInterval(intervalId);
+	}, []);
+
+	return (
+		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+			<div className="bg-white rounded-lg p-8 max-w-sm w-full text-center">
+				<div className="animate-spin mb-4">
+					{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
+<svg
+						className="w-12 h-12 text-indigo-600 mx-auto"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+					>
+						<circle
+							className="opacity-25"
+							cx="12"
+							cy="12"
+							r="10"
+							stroke="currentColor"
+							strokeWidth="4"
+						/>
+						<path
+							className="opacity-75"
+							fill="currentColor"
+							d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+						/>
+					</svg>
+				</div>
+				<p className="text-lg font-semibold text-gray-800 animate-pulse">
+					{loadingPhrases[currentPhraseIndex]}
+				</p>
+			</div>
+		</div>
+	);
+}
 
 export default function UploadPage() {
 	const { address } = useAgoric();
@@ -20,7 +73,7 @@ export default function UploadPage() {
 	});
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [errors, setErrors] = useState<FormErrors>({});
-	const [isSubmitting, setIsSubmitting] = useState(false); // Added loading state
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const { queryContract, executeContract, isLoading, error } =
 		useWardenContract({
 			contractAddress: CONTRACT_ADDRESS,
@@ -36,7 +89,6 @@ export default function UploadPage() {
 		setErrors((prev) => ({ ...prev, [name]: "" }));
 	};
 
-	// In validateForm function
 	const validateForm = (): boolean => {
 		const newErrors: FormErrors = {};
 		if (!formData.name.trim()) newErrors.name = "Name is required";
@@ -51,7 +103,6 @@ export default function UploadPage() {
 	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (file) {
-			// Validate file size (10MB limit)
 			if (file.size > 10 * 1024 * 1024) {
 				setErrors((prev) => ({
 					...prev,
@@ -68,13 +119,12 @@ export default function UploadPage() {
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		if (validateForm()) {
-			setIsSubmitting(true); // Start loading
+			setIsSubmitting(true);
 			try {
 				if (!address) {
 					throw new Error("Wallet connection is not defined");
 				}
 
-				// Convert image to base64 if exists
 				let imageBase64 = "";
 				if (formData.image) {
 					const reader = new FileReader();
@@ -110,9 +160,6 @@ export default function UploadPage() {
 				const data: InscriptionResponse = await response.json();
 				console.log("Upload successful:", data);
 
-				/**
-				 * Warden contract execute and query
-				 */
 				await executeContract({
 					do_stuff: {
 						input: data.transactionHash,
@@ -126,9 +173,6 @@ export default function UploadPage() {
 				});
 				console.log("🚀 ~ warden ~ get_future_result:", result);
 
-				/**
-				 * Reset form after successful submission
-				 */
 				setFormData({ name: "", description: "", price: "", image: null });
 				setImagePreview(null);
 				alert("Cat added successfully!");
@@ -140,179 +184,174 @@ export default function UploadPage() {
 						: "Failed to upload cat. Please try again.",
 				);
 			} finally {
-				setIsSubmitting(false); // Stop loading
+				setIsSubmitting(false);
 			}
 		}
 	};
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-			<div className="max-w-xl mx-auto">
-				<div className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl px-8 py-10">
-					<div className="mb-8">
-						<h2 className="text-2xl font-semibold text-gray-900">
-							Add New Cat
-						</h2>
-						<p className="mt-1 text-sm text-gray-600">
-							Please provide the cat's details and photo
-						</p>
-					</div>
-
-					<form onSubmit={handleSubmit} className="space-y-6">
-						{/* Name Input */}
-						<div>
-							<label
-								htmlFor="name"
-								className="block text-sm font-medium text-gray-700"
-							>
-								Cat's Name
-							</label>
-							<input
-								id="name"
-								name="name"
-								type="text"
-								required
-								className="mt-2 block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-								value={formData.name}
-								onChange={handleInputChange}
-								placeholder="Enter cat's name"
-							/>
-							{errors.name && (
-								<p className="mt-1 text-sm text-red-600">{errors.name}</p>
-							)}
+		<>
+			{isSubmitting && <LoadingOverlay />}
+			<div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+				<div className="max-w-xl mx-auto">
+					<div className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl px-8 py-10">
+						<div className="mb-8">
+							<h2 className="text-2xl font-semibold text-gray-900">
+								Add New Cat
+							</h2>
+							<p className="mt-1 text-sm text-gray-600">
+								Please provide the cat's details and photo
+							</p>
 						</div>
 
-						{/* Description Input */}
-						<div>
-							<label
-								htmlFor="description"
-								className="block text-sm font-medium text-gray-700"
-							>
-								Story
-							</label>
-							<textarea
-								id="description"
-								name="description"
-								rows={4}
-								required
-								className="mt-2 block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-								value={formData.description}
-								onChange={handleInputChange}
-								placeholder="Share the cat's story"
-							/>
-							{errors.description && (
-								<p className="mt-1 text-sm text-red-600">
-									{errors.description}
-								</p>
-							)}
-						</div>
-
-						{/* Price Input */}
-						<div>
-							<label
-								htmlFor="price"
-								className="block text-sm font-medium text-gray-700"
-							>
-								Donation Goal (ATOM)
-							</label>
-							<div className="mt-2 relative rounded-md shadow-sm">
+						<form onSubmit={handleSubmit} className="space-y-6">
+							<div>
+								<label
+									htmlFor="name"
+									className="block text-sm font-medium text-gray-700"
+								>
+									Cat's Name
+								</label>
 								<input
-									id="price"
-									name="price"
+									id="name"
+									name="name"
 									type="text"
 									required
-									className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-									value={formData.price}
+									className="mt-2 block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+									value={formData.name}
 									onChange={handleInputChange}
-									placeholder="0.00"
+									placeholder="Enter cat's name"
 								/>
+								{errors.name && (
+									<p className="mt-1 text-sm text-red-600">{errors.name}</p>
+								)}
 							</div>
-							{errors.price && (
-								<p className="mt-1 text-sm text-red-600">{errors.price}</p>
-							)}
-						</div>
 
-						{/* Image Upload */}
-						<div>
-							{/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
-							<label className="block text-sm font-medium text-gray-700">
-								Cat's Photo
-							</label>
-							<div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-								<div className="text-center">
-									{imagePreview ? (
-										<div className="relative inline-block">
-											<img
-												src={imagePreview}
-												alt="Preview"
-												className="h-40 w-40 object-cover rounded-lg"
-											/>
-											<button
-												type="button"
-												onClick={() => {
-													setImagePreview(null);
-													setFormData((prev) => ({ ...prev, image: null }));
-												}}
-												className="absolute -top-2 -right-2 p-1 bg-white rounded-full text-gray-500 hover:text-red-500 shadow-sm"
-											>
-												<XCircle className="h-5 w-5" />
-											</button>
-										</div>
-									) : (
-										<>
-											<Upload className="mx-auto h-12 w-12 text-gray-300" />
-											<div className="mt-4 flex text-sm leading-6 text-gray-600">
-												<label
-													htmlFor="image"
-													className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+							<div>
+								<label
+									htmlFor="description"
+									className="block text-sm font-medium text-gray-700"
+								>
+									Story
+								</label>
+								<textarea
+									id="description"
+									name="description"
+									rows={4}
+									required
+									className="mt-2 block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+									value={formData.description}
+									onChange={handleInputChange}
+									placeholder="Share the cat's story"
+								/>
+								{errors.description && (
+									<p className="mt-1 text-sm text-red-600">
+										{errors.description}
+									</p>
+								)}
+							</div>
+
+							<div>
+								<label
+									htmlFor="price"
+									className="block text-sm font-medium text-gray-700"
+								>
+									Donation Goal (ATOM)
+								</label>
+								<div className="mt-2 relative rounded-md shadow-sm">
+									<input
+										id="price"
+										name="price"
+										type="text"
+										required
+										className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+										value={formData.price}
+										onChange={handleInputChange}
+										placeholder="0.00"
+									/>
+								</div>
+								{errors.price && (
+									<p className="mt-1 text-sm text-red-600">{errors.price}</p>
+								)}
+							</div>
+
+							<div>
+								{/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
+<label className="block text-sm font-medium text-gray-700">
+									Cat's Photo
+								</label>
+								<div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+									<div className="text-center">
+										{imagePreview ? (
+											<div className="relative inline-block">
+												<img
+													src={imagePreview}
+													alt="Preview"
+													className="h-40 w-40 object-cover rounded-lg"
+												/>
+												<button
+													type="button"
+													onClick={() => {
+														setImagePreview(null);
+														setFormData((prev) => ({ ...prev, image: null }));
+													}}
+													className="absolute -top-2 -right-2 p-1 bg-white rounded-full text-gray-500 hover:text-red-500 shadow-sm"
 												>
-													<span>Upload a photo</span>
-													<input
-														id="image"
-														name="image"
-														type="file"
-														className="sr-only"
-														onChange={handleImageChange}
-														accept="image/png" // Changed from image/* to image/png
-													/>
-												</label>
-												<p className="pl-1">or drag and drop</p>
+													<XCircle className="h-5 w-5" />
+												</button>
 											</div>
-											<p className="text-xs leading-5 text-gray-600">
-												PNG, JPG, GIF up to 10MB
-											</p>
-										</>
-									)}
+										) : (
+											<>
+												<Upload className="mx-auto h-12 w-12 text-gray-300" />
+												<div className="mt-4 flex text-sm leading-6 text-gray-600">
+													<label
+														htmlFor="image"
+														className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+													>
+														<span>Upload a photo</span>
+														<input
+															id="image"
+															name="image"
+															type="file"
+															className="sr-only"
+															onChange={handleImageChange}
+															accept="image/png"
+														/>
+													</label>
+													<p className="pl-1">or drag and drop</p>
+												</div>
+												<p className="text-xs leading-5 text-gray-600">
+													PNG, JPG, GIF up to 10MB
+												</p>
+											</>
+										)}
+									</div>
 								</div>
 							</div>
-							{/* {errors.image && (
-								<p className="mt-1 text-sm text-red-600">{errors.image}</p>
-							)} */}
-						</div>
 
-						{/* Submit Button */}
-						<button
-							type="submit"
-							disabled={isSubmitting}
-							className={`w-full rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 flex items-center justify-center
-								${
-									isSubmitting
-										? "bg-indigo-400 cursor-not-allowed"
-										: "bg-indigo-600 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-								}`}
-						>
-							{isSubmitting ? (
-								<>
-									<Loader2 className="animate-spin mr-2 h-4 w-4" />
-									Adding Cat...
-								</>
-							) : (
-								"Add Cat"
-							)}
-						</button>
-					</form>
+							<button
+								type="submit"
+								disabled={isSubmitting}
+								className={`w-full rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 flex items-center justify-center
+                  ${
+										isSubmitting
+											? "bg-indigo-400 cursor-not-allowed"
+											: "bg-indigo-600 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+									}`}
+							>
+								{isSubmitting ? (
+									<>
+										<Loader2 className="animate-spin mr-2 h-4 w-4" />
+										Adding Cat...
+									</>
+								) : (
+									"Add Cat"
+								)}
+							</button>
+						</form>
+					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }

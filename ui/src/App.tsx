@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Tabs } from "./components/Tabs";
+import { Hello } from "./pages/HelloWorldPage";
 import { InteractPage } from "./pages/InteractPage";
 import { ListPage } from "./pages/ListPage";
 import UploadPage from "./pages/UploadPage";
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
 			{
 				path: "/interact",
 				element: <InteractPage />,
+			},
+			{
+				path: "/hello",
+				element: <Hello />,
 			},
 		],
 	},

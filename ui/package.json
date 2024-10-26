@@ -15,9 +15,12 @@
   },
   "dependencies": {
     "@agoric/react-components": "0.2.1-dev-e6f79e0.0",
+    "@radix-ui/react-icons": "^1.3.0",
     "@wardenprotocol/wardenjs": "^0.0.12-hackmos",
     "buffer": "^6.0.3",
     "chain-registry": "1.28.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "cosmos-kit": "^2.19.0",
     "daisyui": "^4.12.10",
     "ethers": "^6.13.4",
@@ -28,11 +31,14 @@
     "react-daisyui": "^5.0.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.27.0",
-    "ses": "^1.8.0"
+    "ses": "^1.8.0",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@interchain-ui/react": "1.21.18",
     "@keplr-wallet/types": "^0.12.121",
+    "@types/node": "^22.8.1",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
