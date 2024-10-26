@@ -1,48 +1,11 @@
 import { useAgoric } from "@agoric/react-components";
 import { Loader2, Upload, XCircle } from "lucide-react"; // Added Loader2
 import { type ChangeEvent, type FormEvent, useState } from "react";
-
-interface FormData {
-	name: string;
-	description: string;
-	price: string;
-	image: File | null;
-}
-
-interface FormErrors {
-	name?: string;
-	description?: string;
-	price?: string;
-	image?: string;
-}
-
-type InscriptionResponse = {
-	transactionHash: string;
-	inscriptionData: {
-		data: {
-			inscription: Array<{
-				metadata: {
-					parent: {
-						type: string;
-						identifier: string;
-					};
-					metadata: {
-						mime: string;
-						name: string;
-						price: string;
-						description: string;
-					};
-				};
-				content_path: string;
-				content_hash: string;
-			}>;
-		};
-	};
-};
+import type { FormErrors, InscriptionResponse, UploadFormData } from "../types";
 
 export default function UploadPage() {
 	const { address } = useAgoric();
-	const [formData, setFormData] = useState<FormData>({
+	const [formData, setFormData] = useState<UploadFormData>({
 		name: "",
 		description: "",
 		price: "",
