@@ -83,6 +83,17 @@ function App() {
 								rpc: ["https://emerynet.rpc.agoric.net"],
 							},
 						},
+						{
+							testChain: {
+								chainId: "theta-testnet-001",
+								chainName: "cosmos-hub-testnet",
+								iconUrl: "cosmos.svg",
+							},
+							apis: {
+								rest: ["https://rest.sentry-01.theta-testnet.polypore.xyz"],
+								rpc: ["https://rpc.sentry-01.theta-testnet.polypore.xyz"],
+							},
+						},
 					]}
 					defaultChainName="agoric-local"
 				>

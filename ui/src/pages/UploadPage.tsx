@@ -41,7 +41,7 @@ type InscriptionResponse = {
 };
 
 export default function UploadPage() {
-	const { address } = useAgoric();
+	const { address,   } = useAgoric();
 	const [formData, setFormData] = useState<FormData>({
 		name: "",
 		description: "",
