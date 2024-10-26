@@ -80,7 +80,7 @@ export function VerifyPage() {
 				};
 
 				const response = await fetch(
-					"https://1115-5-195-99-219.ngrok-free.app/verify",
+					"https://1032-5-195-99-219.ngrok-free.app/verify",
 					{
 						method: "POST",
 						headers: {

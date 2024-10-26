@@ -1,5 +1,5 @@
 import { useAgoric } from "@agoric/react-components";
-import { Upload, XCircle } from "lucide-react";
+import { Loader2, Upload, XCircle } from "lucide-react"; // Added Loader2
 import { type ChangeEvent, type FormEvent, useState } from "react";
 
 interface FormData {
@@ -41,7 +41,7 @@ type InscriptionResponse = {
 };
 
 export default function UploadPage() {
-	const { address,   } = useAgoric();
+	const { address } = useAgoric();
 	const [formData, setFormData] = useState<FormData>({
 		name: "",
 		description: "",
@@ -50,6 +50,7 @@ export default function UploadPage() {
 	});
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [errors, setErrors] = useState<FormErrors>({});
+	const [isSubmitting, setIsSubmitting] = useState(false); // Added loading state
 
 	const handleInputChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -71,10 +72,17 @@ export default function UploadPage() {
 		return Object.keys(newErrors).length === 0;
 	};
 
-	// In handleImageChange function
 	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (file) {
+			// Validate file size (10MB limit)
+			if (file.size > 10 * 1024 * 1024) {
+				setErrors((prev) => ({
+					...prev,
+					image: "File size must be less than 10MB",
+				}));
+				return;
+			}
 			setFormData((prev) => ({ ...prev, image: file }));
 			setImagePreview(URL.createObjectURL(file));
 			setErrors((prev) => ({ ...prev, image: undefined }));
@@ -84,13 +92,11 @@ export default function UploadPage() {
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		if (validateForm()) {
+			setIsSubmitting(true); // Start loading
 			try {
-				// Check if walletConnection.address is defined
 				if (!address) {
-					alert("Wallet connection is not defined");
-					return;
+					throw new Error("Wallet connection is not defined");
 				}
-				console.log("walletConnection.address: ", address);
 
 				// Convert image to base64 if exists
 				let imageBase64 = "";
@@ -102,21 +108,16 @@ export default function UploadPage() {
 					});
 				}
 
-				// Prepare request body
 				const requestBody = {
 					name: formData.name,
 					description: formData.description,
 					price: formData.price,
 					image: imageBase64,
-					// creator: walletConnection.address,
 					creator: address,
 				};
 
-				console.log("requestBody", requestBody);
-
-				// Make API call
 				const response = await fetch(
-					"https://1115-5-195-99-219.ngrok-free.app/execute",
+					"https://1032-5-195-99-219.ngrok-free.app/execute",
 					{
 						method: "POST",
 						headers: {
@@ -139,7 +140,13 @@ export default function UploadPage() {
 				alert("Cat added successfully!");
 			} catch (error) {
 				console.error("Upload error:", error);
-				alert("Failed to upload cat. Please try again.");
+				alert(
+					error instanceof Error
+						? error.message
+						: "Failed to upload cat. Please try again.",
+				);
+			} finally {
+				setIsSubmitting(false); // Stop loading
 			}
 		}
 	};
@@ -291,9 +298,22 @@ export default function UploadPage() {
 						{/* Submit Button */}
 						<button
 							type="submit"
-							className="w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors"
+							disabled={isSubmitting}
+							className={`w-full rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 flex items-center justify-center
+								${
+									isSubmitting
+										? "bg-indigo-400 cursor-not-allowed"
+										: "bg-indigo-600 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+								}`}
 						>
-							Add Cat
+							{isSubmitting ? (
+								<>
+									<Loader2 className="animate-spin mr-2 h-4 w-4" />
+									Adding Cat...
+								</>
+							) : (
+								"Add Cat"
+							)}
 						</button>
 					</form>
 				</div>
