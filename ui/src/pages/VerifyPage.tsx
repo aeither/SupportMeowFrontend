@@ -71,9 +71,11 @@ export function VerifyPage() {
 					});
 				}
 
+				console.log("formData.transactionHash", formData.transactionHash);
+				
 				const requestBody = {
 					image: imageBase64,
-					transactionHash: formData.transactionHash,
+					txHash: formData.transactionHash,
 					verifier: address,
 				};
 
