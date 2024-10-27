@@ -183,6 +183,7 @@ const Orchestration = () => {
             sender: address,
             receiver: modalAddress,
             timeoutTimestamp: (Math.floor(Date.now() / 1000) + 600) * 1e9, //10
+            memo: 'IPFS CID: bafkreicvcdozijg6pcgipxtf3asq2y5zsbpdvjtuchvcmv2wgo2ecfxhlu',
           },
         };
         const fee = {
