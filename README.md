@@ -4,6 +4,39 @@
 
 https://github.com/armsves/SupportMEowBackend
 
+## Description
+
+A blockchain platform where animal shelters inscribe their cats' photos as digital assets on Asteroid, creating a direct bridge between rescue cats and crypto supporters through verifiable donations.
+
+## 🚀 Key Features
+AI-powered cat image verification
+Cross-chain inscriptions via IBC
+IPFS temporary storage
+Blockchain-based donation system
+Image hash verification system
+
+## 🛠 Technical Stack
+Frontend: Agoric Dapp Template
+Backend: Warden AI Verification
+Blockchain: Asteroid (inscriptions), ATOM (donations)
+Storage: IPFS (temporary)
+Cross-chain: IBC messaging
+
+## 🔄 How It Works
+Image Upload & Verification
+- Users submit shelter cat images
+- AI system verifies authenticity of cat images
+- Only verified cat images proceed to inscription
+Cross-Chain Inscription Process
+- Image temporarily stored on IPFS
+- IBC message sent with IPFS CID as memo
+- Logging bot listens for memo information
+- Image inscribed on Asteroid
+- IPFS file automatically deleted post-inscription
+Donation System
+- Browse inscribed cats in list view
+- Send ATOM donations directly to shelters
+- Transparent and immediate transaction processing
 
 # Agoric Orchestration Basics Dapp
 
