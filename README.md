@@ -1,4 +1,6 @@
-![Flux](https://github.com/user-attachments/assets/64f03e69-893a-49c1-a2ad-b6d590232110)
+
+![CleanShot 2024-10-27 at 11 20 55@2x](https://github.com/user-attachments/assets/1e6d5e56-8f28-426a-975d-e390cb8fe5df)
+
 
 ## Backend
 
@@ -153,3 +155,6 @@ agd tx bank send keplr1 agoric15ch7da0d8nvqc8hk6dguq4ext0lvskpjcwm3patf8sygm63ch
 you can run `yarn dev` inside of the `ui` folder. 
 
 <img src="./images/ui.png" width="100%" />
+
+![Flux](https://github.com/user-attachments/assets/64f03e69-893a-49c1-a2ad-b6d590232110)
+
