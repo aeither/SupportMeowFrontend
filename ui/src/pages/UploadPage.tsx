@@ -1,3 +1,4 @@
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { useAgoric } from "@agoric/react-components";
 import { Loader2, Upload, XCircle } from "lucide-react";
 import { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
@@ -34,7 +35,7 @@ function LoadingOverlay() {
 			<div className="bg-white rounded-lg p-8 max-w-sm w-full text-center">
 				<div className="animate-spin mb-4">
 					{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
-<svg
+					<svg
 						className="w-12 h-12 text-indigo-600 mx-auto"
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -277,7 +278,7 @@ export default function UploadPage() {
 
 							<div>
 								{/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
-<label className="block text-sm font-medium text-gray-700">
+								<label className="block text-sm font-medium text-gray-700">
 									Cat's Photo
 								</label>
 								<div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
@@ -329,7 +330,7 @@ export default function UploadPage() {
 								</div>
 							</div>
 
-							<button
+							<RainbowButton
 								type="submit"
 								disabled={isSubmitting}
 								className={`w-full rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 flex items-center justify-center
@@ -347,7 +348,7 @@ export default function UploadPage() {
 								) : (
 									"Add Cat"
 								)}
-							</button>
+							</RainbowButton>
 						</form>
 					</div>
 				</div>
