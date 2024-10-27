@@ -26,6 +26,7 @@
     "cosmos-kit": "^2.19.0",
     "daisyui": "^4.12.10",
     "ethers": "^6.13.4",
+    "framer-motion": "^11.11.10",
     "graphql": "^16.9.0",
     "graphql-request": "^7.1.0",
     "lucide-react": "^0.453.0",

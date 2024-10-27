@@ -28,7 +28,7 @@ interface QueryResponse {
 
 const QUERY = `
   query {
-    inscription(where: { creator: { _eq: "cosmos1m9l358xunhhwds0568za49mzhvuxx9uxre5tud" } }) {
+    inscription(where: { creator: { _eq: "cosmos1a3rrhuss9eqczzvndm27z9dehh045w7hq3l3xc" } }) {
       metadata
       content_path
       content_hash
@@ -160,7 +160,7 @@ export function ListPage() {
 			const result = await client.sendTokens(
 				accounts[0].address,
 				selectedInscription.metadata.metadata.creator ||
-					"cosmos1m9l358xunhhwds0568za49mzhvuxx9uxre5tud",
+					"cosmos1a3rrhuss9eqczzvndm27z9dehh045w7hq3l3xc",
 				[{ denom: "uatom", amount: uatomAmount }],
 				{
 					amount: [{ denom: "uatom", amount: "5000" }],
@@ -290,7 +290,7 @@ export function ListPage() {
 									</Dialog.Title>
 
 									<div className="mt-2">
-										<div className="mb-4">
+										<div className="mb-4 space-y-2">
 											<label
 												htmlFor="amount"
 												className="block text-sm font-medium text-gray-700"

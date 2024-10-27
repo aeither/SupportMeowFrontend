@@ -1,4 +1,6 @@
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { useAgoric } from "@agoric/react-components";
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Loader2, Upload, XCircle } from "lucide-react";
 import { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
 import { useWardenContract } from "../hooks/useWardenContract";
@@ -15,6 +17,15 @@ const loadingPhrases = [
 	"Uploading Image to Asteroid",
 	"Executing on Warden",
 ];
+
+const ExecuteMsg = {
+	doStuff: (input) => ({
+		do_stuff: { input },
+	}),
+	futureReady: (output) => ({
+		future_ready: { output },
+	}),
+};
 
 function LoadingOverlay() {
 	const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
@@ -34,7 +45,7 @@ function LoadingOverlay() {
 			<div className="bg-white rounded-lg p-8 max-w-sm w-full text-center">
 				<div className="animate-spin mb-4">
 					{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
-<svg
+					<svg
 						className="w-12 h-12 text-indigo-600 mx-auto"
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -143,7 +154,7 @@ export default function UploadPage() {
 				};
 
 				const response = await fetch(
-					"https://1032-5-195-99-219.ngrok-free.app/execute",
+					"https://44e3-5-195-99-219.ngrok-free.app/execute",
 					{
 						method: "POST",
 						headers: {
@@ -160,12 +171,45 @@ export default function UploadPage() {
 				const data: InscriptionResponse = await response.json();
 				console.log("Upload successful:", data);
 
+				/**
+				 *
+				 */
+				const msg = ExecuteMsg.doStuff(
+					"execute offchain AI model for safe content :)",
+				);
+				const fee = {
+					amount: [
+						{
+							denom: "uatom",
+							amount: "5000",
+						},
+					],
+					gas: "200000",
+				};
+
+				const chainId = "theta-testnet-001";
+				const treasuryAddress = "cosmos1dknqh4amzlechgzpp3rtrzygv33xwfq9l6ydjp";
+
+				await window.keplr.enable(chainId);
+				const offlineSigner = window.keplr.getOfflineSigner(chainId);
+				const accounts = await offlineSigner.getAccounts();
+
+				const client = await SigningCosmWasmClient.connectWithSigner(
+					"https://rpc.sentry-01.theta-testnet.polypore.xyz",
+					offlineSigner,
+				);
+
+				await client.execute(accounts[0].address, treasuryAddress, msg, fee);
+
 				await executeContract({
 					do_stuff: {
 						input: data.transactionHash,
 					},
 				});
 
+				/**
+				 * warden
+				 */
 				const result = await queryContract({
 					get_future_result: {
 						id: 0,
@@ -194,6 +238,7 @@ export default function UploadPage() {
 			{isSubmitting && <LoadingOverlay />}
 			<div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
 				<div className="max-w-xl mx-auto">
+					{/* <RippleWrapper> */}
 					<div className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl px-8 py-10">
 						<div className="mb-8">
 							<h2 className="text-2xl font-semibold text-gray-900">
@@ -277,7 +322,7 @@ export default function UploadPage() {
 
 							<div>
 								{/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
-<label className="block text-sm font-medium text-gray-700">
+								<label className="block text-sm font-medium text-gray-700">
 									Cat's Photo
 								</label>
 								<div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
@@ -321,7 +366,7 @@ export default function UploadPage() {
 													<p className="pl-1">or drag and drop</p>
 												</div>
 												<p className="text-xs leading-5 text-gray-600">
-													PNG, JPG, GIF up to 10MB
+													PNG up to 500kb
 												</p>
 											</>
 										)}
@@ -329,7 +374,7 @@ export default function UploadPage() {
 								</div>
 							</div>
 
-							<button
+							<RainbowButton
 								type="submit"
 								disabled={isSubmitting}
 								className={`w-full rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 flex items-center justify-center
@@ -347,9 +392,10 @@ export default function UploadPage() {
 								) : (
 									"Add Cat"
 								)}
-							</button>
+							</RainbowButton>
 						</form>
 					</div>
+					{/* </RippleWrapper> */}
 				</div>
 			</div>
 		</>
