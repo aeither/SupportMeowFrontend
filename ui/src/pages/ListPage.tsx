@@ -290,7 +290,7 @@ export function ListPage() {
 									</Dialog.Title>
 
 									<div className="mt-2">
-										<div className="mb-4">
+										<div className="mb-4 space-y-2">
 											<label
 												htmlFor="amount"
 												className="block text-sm font-medium text-gray-700"

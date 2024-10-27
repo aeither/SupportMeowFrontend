@@ -1,10 +1,25 @@
 "use client";
 
-import { SigningStargateClient } from "@cosmjs/stargate";
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { useState } from "react";
 
 const chainId = "theta-testnet-001";
 const treasuryAddress = "cosmos1dknqh4amzlechgzpp3rtrzygv33xwfq9l6ydjp";
+
+const ExecuteMsg = {
+	doStuff: (input) => ({
+		do_stuff: { input },
+	}),
+	futureReady: (output) => ({
+		future_ready: { output },
+	}),
+};
+
+const QueryMsg = {
+	getFutureResult: (id) => ({
+		get_future_result: { id },
+	}),
+};
 
 export function Hello() {
 	const [inputValue, setInputValue] = useState("");
@@ -16,7 +31,7 @@ export function Hello() {
 		const offlineSigner = window.keplr.getOfflineSigner(chainId);
 		const accounts = await offlineSigner.getAccounts();
 
-		const client = await SigningStargateClient.connectWithSigner(
+		const client = await SigningCosmWasmClient.connectWithSigner(
 			"https://rpc.sentry-01.theta-testnet.polypore.xyz",
 			offlineSigner,
 		);
@@ -35,18 +50,18 @@ export function Hello() {
 			throw new Error("Insufficient balance for donation and fees");
 		}
 
-		const result = await client.sendTokens(
-			accounts[0].address,
-			treasuryAddress || "cosmos1a3rrhuss9eqczzvndm27z9dehh045w7hq3l3xc",
-			[{ denom: "uatom", amount: uatomAmount }],
-			{
-				amount: [{ denom: "uatom", amount: "5000" }],
-				gas: "200000",
-			},
-			`Upload ${treasuryAddress}`,
-		);
+		const msg = ExecuteMsg.doStuff("execute offchain AI model for safe content :)");
+		const fee = {
+			amount: [
+				{
+					denom: "uatom",
+					amount: "5000",
+				},
+			],
+			gas: "200000",
+		};
 
-		setOutputText(`Button 1 clicked! Input value: ${inputValue}`);
+		return await client.execute(accounts[0].address, treasuryAddress, msg, fee);
 	};
 
 	const handleButton2Click = () => {
