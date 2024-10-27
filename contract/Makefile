@@ -10,7 +10,7 @@ ATOM=000000$(ATOM_DENOM)
 
 # your deployer address made from make add-address
 # ADDR=agoric1k78s7qz7rxy8afyjrqk3dntg8m83zaw3upe60p
-ADDR=agoric1dk0cph8dgts6rzk247xt9j27hk6pt4nqhafkcp
+ADDR=agoric1zsw3wmzygtzxns5tmsncjzdzv9r5jsn4l0s0us
 
 PROVISION_POOL_ADDR=agoric1megzytg65cyrgzs6fvzxgrcqvwwl7ugpt62346
 
@@ -19,8 +19,8 @@ VOTE_OPTION=yes
 
 # `CLIENTADDR` is your address from your browser wallet that you will use to interact with the orchestration dapp. 
 #`CLIENT_OSMO_ADDR` is the same, but your osmosis account.
-CLIENTADDR=agoric12j5kzvrwunqvrga5vm4zpy3mkeh3lvyld0amz5
-CLIENT_OSMO_ADDR=osmo1rhvgsqq96n3qyv3u0zlwleyaunpmal6uhnam4z
+CLIENTADDR=agoric15m9zu7cpggffz2e8ynsmjguv6usez7dp76nvl4
+CLIENT_OSMO_ADDR=osmo1a3rrhuss9eqczzvndm27z9dehh045w7hg2vps2
 
 DEPLOY=npx --no-install tsx ../e2e-testing/scripts/deploy-cli.ts
 

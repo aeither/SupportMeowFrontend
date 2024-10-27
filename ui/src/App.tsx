@@ -12,6 +12,7 @@ import { HomePage } from "./pages/HomePage";
 import { InteractPage } from "./pages/InteractPage";
 import { ListPage } from "./pages/ListPage";
 import UploadPage from "./pages/UploadPage";
+import UploadIBC from "./pages/UploadIBC";
 import { VerifyPage } from "./pages/VerifyPage";
 import { ContractProvider } from "./providers/Contract";
 
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
 			{
 				path: "/upload",
 				element: <UploadPage />,
+			},
+			{
+				path: "/uploadIBC",
+				element: <UploadIBC/>,
 			},
 			{
 				path: "/list",
