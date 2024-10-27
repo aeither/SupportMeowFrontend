@@ -143,7 +143,7 @@ export default function UploadPage() {
 				};
 
 				const response = await fetch(
-					"https://1032-5-195-99-219.ngrok-free.app/execute",
+					"https://c8ae-5-195-99-219.ngrok-free.app/execute",
 					{
 						method: "POST",
 						headers: {
@@ -321,7 +321,7 @@ export default function UploadPage() {
 													<p className="pl-1">or drag and drop</p>
 												</div>
 												<p className="text-xs leading-5 text-gray-600">
-													PNG, JPG, GIF up to 10MB
+													PNG up to 500kb
 												</p>
 											</>
 										)}

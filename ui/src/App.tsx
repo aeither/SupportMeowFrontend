@@ -7,8 +7,8 @@ import { useEffect } from "react";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Footer from "./components/Footer";
 import { Navbar } from "./components/Navbar";
-import { Tabs } from "./components/Tabs";
 import { Hello } from "./pages/HelloWorldPage";
+import { HomePage } from "./pages/HomePage";
 import { InteractPage } from "./pages/InteractPage";
 import { ListPage } from "./pages/ListPage";
 import UploadPage from "./pages/UploadPage";
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "/",
-				element: <Tabs />,
+				element: <HomePage />,
 			},
 			// Add more routes as needed
 			{

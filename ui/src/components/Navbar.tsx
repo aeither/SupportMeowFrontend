@@ -1,5 +1,4 @@
 import { ConnectWalletButton, NetworkDropdown } from "@agoric/react-components";
-import { ThumbsUpIcon } from "lucide-react";
 
 const Navbar = () => {
 	return (
@@ -8,22 +7,21 @@ const Navbar = () => {
 				<div className="flex items-center justify-between h-16">
 					{/* Logo and Brand */}
 					<div className="flex items-center">
-						<a
-							href="/"
-							className="flex items-center space-x-3 group"
-							aria-label="Home"
-						>
-							{/* <div className="relative flex-shrink-0 w-8 h-8">
+						<a href="/" className="flex items-center group" aria-label="Home">
+							<div
+								className="relative flex-shrink-0"
+								style={{ width: "50px", height: "50px" }}
+							>
 								<img
-									src="/agoric.svg"
+									src="/logo.png"
 									alt=""
 									className="w-full h-full object-contain transition-transform group-hover:scale-105"
 									loading="eager"
 								/>
-							</div> */}
-							<ThumbsUpIcon className="text-white" />
-							<span className="hidden sm:block text-xl font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-								Cat Shelter
+							</div>
+							{/* <ThumbsUpIcon className="text-white" /> */}
+							<span className="hidden sm:block text-xl pl-2 font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+								SupportMEow
 							</span>
 						</a>
 					</div>

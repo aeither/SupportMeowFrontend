@@ -37,7 +37,7 @@ export function Hello() {
 
 		const result = await client.sendTokens(
 			accounts[0].address,
-			treasuryAddress || "cosmos1m9l358xunhhwds0568za49mzhvuxx9uxre5tud",
+			treasuryAddress || "cosmos1a3rrhuss9eqczzvndm27z9dehh045w7hq3l3xc",
 			[{ denom: "uatom", amount: uatomAmount }],
 			{
 				amount: [{ denom: "uatom", amount: "5000" }],
